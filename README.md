@@ -1,5 +1,4 @@
 #find-async
------------
 
 Meteor package that extends Meteor.Collection with asynchronous database calls and aggregation.  Reduced time in some methods by 80% by making db queries concurrent.
 
