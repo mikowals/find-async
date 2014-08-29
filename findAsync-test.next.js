@@ -1,7 +1,7 @@
 var testCol = new Meteor.Collection( 'testCol');
 
 
-Tinytest.add( 'find-async - test findOneFuture',  test => {
+Tinytest.add( 'find-async - test findOnePromise',  test => {
   testCol.remove({});
   var insertedId = testCol.insert({data: 'nonsense', aNumber: 10});
   var testResult = testCol.findOneFuture( {}, {fields:{data:1, aNumber: 1}});
@@ -36,9 +36,6 @@ Tinytest.add( 'find-async - async functions are truely async',  test => {
       fut.return( err || val.name );
   });
   test.equal(temp, "", 'string should be empty before callback completes');
-  console.log('test print 1');
-  console.log('test print 2');
-  console.log('test print 3');
   test.equal( fut.wait(), temp, 'string should have name after wait');
 
   var testResult = testCol.findOneFuture( {name: "Enrique"});
@@ -64,7 +61,7 @@ Tinytest.add( 'find-async - Mongo driver distinct',  test => {
 });
 
 
-Tinytest.add( 'find-async - test aggregate',  test => {
+Tinytest.add( 'find-async - aggregation',  test => {
   testCol.remove( {} );
   [ for ( sex of ['male', 'female']) for ( number of [1,2,3,4,5]) testCol.insert( {_id: sex + number, sex, number})];
 
