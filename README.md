@@ -4,7 +4,7 @@ Meteor package that extends Meteor.Collection with asynchronous database calls a
 
 #Installation
 
-In your meteor app run:
+In your meteor app directory run:
 
     meteor add mikowals:find-async
 
