@@ -1,22 +1,14 @@
-var testCol = new Meteor.Collection( 'testCol');
-
+var testCol = new Mongo.Collection( 'testCol');
+async function wait( fut, prom ) { fut.return( await prom );}
 
 Tinytest.add( 'find-async - test findOnePromise',  test => {
   testCol.remove({});
   var insertedId = testCol.insert({data: 'nonsense', aNumber: 10});
-  var testResult = testCol.findOneFuture( {}, {fields:{data:1, aNumber: 1}});
-  test.instanceOf( testResult, Future, 'should be able to get a future from a collection' );
-  test.equal( testResult.wait(), {data: 'nonsense', aNumber: 10, _id: insertedId }, 'waiting for future should return data inserted');
-
   var p = testCol.findOnePromise( {}, {fields:{data:1, aNumber: 1}} );
-  var fut = new Future;
-  p.then( ( res ) => {
-    fut.return ( res );
-  }, ( rej ) => {
-    throw rej
-  });
-  test.equal( fut.wait(), {data: 'nonsense', aNumber: 10, _id: insertedId }, 'findOnePromise should return same object');
 
+  var fut = new Future;
+  wait( fut, p);
+  test.equal( fut.wait(), {data: 'nonsense', aNumber: 10, _id: insertedId }, 'findOnePromise should return same object');
   testCol.remove({});
 });
 
@@ -26,12 +18,10 @@ Tinytest.add( 'find-async - async functions are truely async',  test => {
   testCol.upsert({name:"Paulo"},{name: 'Paulo', address:"3rd rock" });
   var temp = "";
   var fut = new Future();
-
   testCol.findOneAsync( {name: "Enrique"},
     ( err, val) =>{
       if (val && val.name) {
         temp = val.name;
-        console.log( 'in Async: name is ', val.name);
       }
       fut.return( err || val.name );
   });
@@ -40,9 +30,7 @@ Tinytest.add( 'find-async - async functions are truely async',  test => {
 
   var testResult = testCol.findOneFuture( {name: "Enrique"});
   test.throws( testResult.get.bind( testResult), "Future must resolve before value is ready", "get should fail while waiting for db" );
-
   test.equal( testResult.wait().name, "Enrique", "get() should return value after wait()");
-
   testCol.remove({});
 });
 
