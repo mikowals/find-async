@@ -1,6 +1,6 @@
 Package.describe({
   "name": "mikowals:find-async",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "git": "https://github.com/mikowals/find-async.git",
   "summary": "Extend Meteor.Collection with asynchronous mongo functions and aggregation."
 });
